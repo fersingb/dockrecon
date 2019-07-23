@@ -1,6 +1,6 @@
 # Dockrecon
 
-Dockrecon is a docker image that contains tools used for recon. Right now it contains only nmap and webscreenshot. I'll add more tools later.
+Dockrecon is a docker image that contains tools used for recon. Right now it contains only amass, nmap and webscreenshot. I'll add more tools later.
 
 # How to use it
 Clone the repository and build the image:

@@ -1,5 +1,12 @@
-FROM alpine:3.8
+FROM golang:1.12.6-alpine3.10 as build
+RUN apk --no-cache add git
+RUN go get github.com/OWASP/Amass; exit 0
+ENV GO111MODULE on
+WORKDIR /go/src/github.com/OWASP/Amass
+RUN go install ./...
 
+
+FROM alpine:3.8
 RUN apk update && apk add --no-cache nmap nmap-scripts python3 fontconfig curl curl-dev xvfb git ttf-dejavu
 
 RUN mkdir -p /tmp/phantom \
@@ -10,14 +17,14 @@ RUN mkdir -p /tmp/phantom \
     && curl -k -Ls https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar -jxf - \
     && cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs \
     && cd .. \ 
-    && rm -r phantom
-	
+    && rm -r phantom	
 RUN cd /tmp/ \
     && git clone https://github.com/maaaaz/webscreenshot \
     && pip3 install --upgrade pip \
     && pip3 install --no-cache-dir -r webscreenshot/requirements.txt \
     && pip3 install webscreenshot \
     && rm -r webscreenshot
-
 COPY ./xvfb-run /usr/bin/
 RUN chmod +x /usr/bin/xvfb-run
+COPY --from=build /go/bin/amass /bin/amass
+COPY --from=build /go/src/github.com/OWASP/Amass/wordlists/ /wordlists/
