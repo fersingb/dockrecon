@@ -5,7 +5,7 @@ Dockrecon is a docker image that contains tools used for recon. Right now it con
 # How to use it
 Clone the repository and build the image:
 ```
-$ git@github.com:fersingb/dockrecon.git
+$ git clone git@github.com:fersingb/dockrecon.git
 $ cd dockrecon
 $ docker build -t dockrecon .
 ```
